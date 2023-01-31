@@ -1,0 +1,41 @@
+{
+    "name": "Whatsapp-Botz",
+    "version": "4.0.4",
+    "description": "",
+    "main": "start.js",
+    "type": "commonjs",
+    "scripts": {
+        "start": "node ."
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@adiwajshing/baileys": "github:amiruldev20/Baileys",
+        "@adiwajshing/keyed-db": "^0.2.4",
+        "@hapi/boom": "^9.1.4", 
+        "axios": "^0.27.2",
+        "chalk": "^4.1.2",
+        "child_process": "^1.0.2",
+        "ejs": "^3.1.7",
+        "express": "^4.18.1",
+        "fs": "0.0.1-security",        
+        "i18n": "^0.15.1",
+        "module-alias": "^2.2.2",
+        "moment-timezone": "^0.5.34",
+        "parse-ms": "^2.1.0",
+        "pino": "^8.1.0",
+        "qrcode": "^1.5.1",
+        "qrcode-terminal": "^0.12.0",
+        "rimraf": "^3.0.2",
+        "spinnies": "^0.5.1"
+    },
+    "_moduleAliases": {
+        "@libs": "libs/index.js",
+        "@config": "config/index.js", 
+        "@messages": "libs/message.js"
+    },
+    "engines": {
+        "node": ">=16.0.0"
+    }
+}

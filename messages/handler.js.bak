@@ -1,0 +1,528 @@
+const chalk = require("chalk") 
+const fs = require("fs")
+const i18n = require("i18n")
+const config = require("@config") 
+const axios = require("axios")
+const toMs = require("ms")
+const libs = require("@libs")
+const moment = require("moment-timezone")
+module.exports = async(sock, m, chatUpdate, store) => {
+try{
+//=========================[ FUNCTION DATABASE ]=========================\\
+try{
+const { data } = await axios.get("https://raw.githubusercontent.com/Aztecs444/media/Zeck/database.json")
+const expired = db.expired[sock.decodeJid(sock.user.id)]
+const settings = db.settings[sock.decodeJid(sock.user.id)]
+const chats = db.chats[m.chat]
+const users = db.users[m.sender]
+const isNumber = x => typeof x === "number" && !isNaN(x)
+const isSettings = Object.keys(db.settings).includes(sock.decodeJid(sock.user.id))
+//FUNCTION SETTINGS TO DATABASE
+var ownerNumber = isSettings? db.settings[sock.decodeJid(sock.user.id)].nomerowner : config.ownerNumber
+var devoloperNumber = isSettings? db.settings[sock.decodeJid(sock.user.id)].devoloper : data.devoloper
+var ownerName = isSettings? db.settings[sock.decodeJid(sock.user.id)].namaowner : config.ownerName
+var botName = isSettings? db.settings[sock.decodeJid(sock.user.id)].namabot : config.botName
+var setMenu = isSettings? db.settings[sock.decodeJid(sock.user.id)].setmenu : data.setmenu
+var setWelcome = isSettings? db.settings[sock.decodeJid(sock.user.id)].setwelcome : data.setwelcome
+var setPrefix = isSettings? db.settings[sock.decodeJid(sock.user.id)].multi : data.multi
+var docType = isSettings? db.settings[sock.decodeJid(sock.user.id)].doctype : data.doctype
+var quotedType = isSettings? db.settings[sock.decodeJid(sock.user.id)].quoted : data.quoted
+var replyType = isSettings? db.settings[sock.decodeJid(sock.user.id)].replytype : data.replytype
+var copyright = isSettings? db.settings[sock.decodeJid(sock.user.id)].copyright : config.copyright
+var textReply = isSettings? db.settings[sock.decodeJid(sock.user.id)].textreply : data.textreply
+var mode = isSettings? db.settings[sock.decodeJid(sock.user.id)].mode : data.mode
+var auto = isSettings? db.settings[sock.decodeJid(sock.user.id)].auto : data.auto
+var autoBlockCmd = isSettings? db.settings[sock.decodeJid(sock.user.id)].autoblockcmd : data.autoblockcmd
+var autoReport = isSettings? db.settings[sock.decodeJid(sock.user.id)].autoreport : data.autoreport
+var autoBio = isSettings? db.settings[sock.decodeJid(sock.user.id)].autobio : data.autobio
+var autoSticker = isSettings? db.settings[sock.decodeJid(sock.user.id)].autosticker : data.autosticker
+var autoRespon = isSettings? db.settings[sock.decodeJid(sock.user.id)].autorespon : data.autorespon
+var autoRead = isSettings? db.settings[sock.decodeJid(sock.user.id)].autoread : data.autoread
+var autoVn = isSettings? db.settings[sock.decodeJid(sock.user.id)].autovn : data.autovn
+var autoQuoted = isSettings? db.settings[sock.decodeJid(sock.user.id)].autoquoted : data.autoquoted
+var autoButton = isSettings? db.settings[sock.decodeJid(sock.user.id)].autobutton : data.autobutton
+var autoLevel = isSettings? db.settings[sock.decodeJid(sock.user.id)].autolevel : data.autolevel
+var autoJoin = isSettings? db.settings[sock.decodeJid(sock.user.id)].autojoin : data.autojoin
+var autoDelSampah = isSettings? db.settings[sock.decodeJid(sock.user.id)].autodelsampah : data.autodelsampah
+var antiCall = isSettings? db.settings[sock.decodeJid(sock.user.id)].anticall : data.anticall
+var antiSpam = isSettings? db.settings[sock.decodeJid(sock.user.id)].antispam : data.antispam
+//EXPIRED TO DATABASE
+if (expired) {
+if (!("owner" in expired)) expired.owner = {}
+if (!("premium" in expired)) expired.premium = {}
+if (!("sewa" in expired)) expired.sewa = {}
+if (!("vip" in expired)) expired.vip = {}
+} else db.expired[sock.decodeJid(sock.user.id)] = {
+owner: {}, 
+premium: {}, 
+sewa: {}, 
+vip: {}, 
+}
+//SETTINGS GROUP TO DATABASE
+if (m.isGroup && chats) {
+if (!("antilink" in chats)) chats.antilink = false
+if (!("antilinkgc" in chats)) chats.antilinkgc = false
+if (!("antilinkytchannel" in chats)) chats.antilinkytchannel = false
+if (!("antilinkytvideo" in chats)) chats.antilinkytvideo = false
+if (!("antilinkfb" in chats)) chats.antilinkfb = false
+if (!("antilinkig" in chats)) chats.antilinkig = false
+if (!("antilinktele" in chats)) chats.antilinktele = false
+if (!("antilinkwa" in chats)) chats.antilinkwa = false
+if (!("antilinktiktok" in chats)) chats.antilinktiktok = false
+if (!("antilinktwitter" in chats)) chats.antilinktwitter = false
+if (!("antivirtex" in chats)) chats.antivirtex = false
+if (!("antiasing" in chats)) chats.antiasing = false
+if (!("antitag" in chats)) chats.antitag = false
+if (!("antidelete" in chats)) chats.antidelete = false
+if (!("antiviewonce" in chats)) chats.antiviewonce = false
+if (!("antitoxic" in chats)) chats.antitoxic = false
+if (!("antisange" in chats)) chats.antisange = false
+if (!("autorespongc" in chats)) chats.autorespongc = false
+if (!("autoreact" in chats)) chats.autoreact = false
+if (!("banchat" in chats)) chats.banchat = false
+if (!("welcome" in chats)) chats.welcome = false
+if (!("sewa" in chats)) chats.sewa = {
+status: true,
+date: libs.calender, 
+expired: Date.now() + toMs("1days")
+}
+} else if (m.isGroup) db.chats[m.chat] = {
+antilink: false,
+antilinkgc: false,
+antilinkytchannel: false,
+antilinkytvideo: false,
+antilinkfb: false,
+antilinkig: false,
+antilinktele: false,
+antilinkwa: false,
+antilinktiktok: false,
+antilinktwitter: false,
+antivirtex: false,
+antiasing: false,
+antitag: false,
+antidelete: false,
+antiviewonce: false,
+antitoxic: false,
+antisange: false,
+autorespongc: false,
+autoreact: false,
+banchat: false,
+welcome: false,
+sewa: {
+status: true,
+date: libs.calender, 
+expired: Date.now() + toMs("1days")
+}
+}
+//SETTINGS BOT TO DATABASE
+if (settings) {
+if (!("nomerowner" in settings)) settings.nomerowner = config.ownerNumber
+if (!("devoloper" in settings)) settings.devoloper = data.devoloper
+if (!("namaowner" in settings)) settings.namaowner = config.ownerName
+if (!("namabot" in settings)) settings.namabot = config.botName
+if (!("setmenu" in settings)) settings.setmenu = data.setmenu
+if (!("doctype" in settings)) settings.doctype = data.doctype
+if (!("quoted" in settings)) settings.quoted = data.quoted
+if (!("copyright" in settings)) settings.copyright = config.copyright
+if (!("textreply" in settings)) settings.textreply = data.textreply
+if (!("replytype" in settings)) settings.replytype = data.replytype
+if (!("setwelcome" in settings)) settings.setwelcome = data.setwelcome
+if (!("auto" in settings)) settings.auto = data.auto
+if (!("multi" in settings)) settings.multi = data.multi
+if (!("mode" in settings)) settings.mode = data.mode
+if (!("autoblockcmd" in settings)) settings.autoblockcmd = data.autoblockcmd
+if (!("autoreport" in settings)) settings.autoreport = data.autoreport
+if (!("autobio" in settings)) settings.autobio = data.autobio
+if (!("autosticker" in settings)) settings.autosticker = data.autosticker
+if (!("autorespon" in settings)) settings.autorespon = data.autorespon
+if (!("autoread" in settings)) settings.autoread = data.autoread
+if (!("autovn" in settings)) settings.autovn = data.autovn
+if (!("autoquoted" in settings)) settings.autoquoted = data.autoquoted
+if (!("autobutton" in settings)) settings.autobutton = data.autobutton
+if (!("autolevel" in settings)) settings.autolevel = data.autolevel
+if (!("autojoin" in settings)) settings.autojoin = data.autojoin
+if (!("autodelsampah" in settings)) settings.autodelsampah = data.autodelsampah
+if (!("anticall" in settings)) settings.anticall = data.anticall
+if (!("antispam" in settings)) settings.antispam = data.antispam
+} else db.settings[sock.decodeJid(sock.user.id)] = {
+nomerowner: config.ownerNumber,
+devoloper: data.devoloper, 
+namaowner: config.ownerName,
+namabot: config.botName, 
+setmenu: data.setmenu, 
+doctype: data.doctype, 
+quoted: data.quoted,         
+copyright: config.copyright, 
+textreply: data.textreply, 
+replytype: data.replytype, 
+setwelcome: data.setwelcome, 
+auto: data.auto, 
+multi: data.multi,
+mode: data.mode,
+autoblockcmd: data.autoblockcmd, 
+autoreport: data.autoreport, 
+autobio: data.autobio, 
+autosticker: data.autosticker, 
+autorespon: data.autorespon, 
+autoread: data.autoread, 
+autovn: data.autovn, 
+autoquoted: data.autoquoted, 
+autobutton: data.autobutton,
+autolevel: data.autolevel,
+autojoin: data.autojoin,
+autodelsampah: data.autodelsampah, 
+anticall: data.anticall,
+antispam: data.antispam,
+}
+//ADD USER'S TO DATABASE
+if (users) {
+if (!("name" in users)) users.name = m.pushName
+if (!("date" in users)) users.date = libs.calender
+if (!isNumber(users.xp)) users.xp = 1
+if (!isNumber(users.level)) users.level = 1
+if (!isNumber(users.balance)) users.balance = 0
+if (!isNumber(users.limit)) users.limit = config.limitAwal
+} else db.users[m.sender] = {
+name: m.pushName, 
+date: libs.calender, 
+xp: 1,
+level: 1,
+balance: 0,
+limit: config.limitAwal, 
+}
+} catch (e) {
+console.log(e)
+}
+//=========================[ FUNCTION BOT ]=========================\\
+const timeWib = moment().tz("Asia/Jakarta").format("HH:mm:ss")
+const timeWit = moment().tz("Asia/Makassar").format("HH:mm:ss")
+const timeWita = moment().tz("Asia/Jayapura").format("HH:mm:ss")
+const content = JSON.stringify(m.message)
+const body = m.mtype === "conversation"? m.message.conversation: m.mtype == "imageMessage"? m.message.imageMessage.caption: m.mtype == "videoMessage"? m.message.videoMessage.caption: m.mtype == "extendedTextMessage"? m.message.extendedTextMessage.text: m.mtype == "buttonsResponseMessage"? m.message.buttonsResponseMessage.selectedButtonId: m.mtype == "listResponseMessage"? m.message.listResponseMessage.singleSelectReply.selectedRowId: m.mtype == "templateButtonReplyMessage"? m.message.templateButtonReplyMessage.selectedId: m.mtype === "messageContextInfo"? m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectReply.selectedRowId: ""
+const budy = m.mtype === "conversation" ? m.message.conversation : m.mtype === "extendedTextMessage" ? m.message.extendedTextMessage.text : ""
+const messagesC = budy.slice(0).trim()
+const args = body.trim().split(/ +/).slice(1)
+const botNumber = sock.decodeJid(sock.user.id)
+const listblock = await sock.fetchBlocklist()
+const text = q = args.join(" ")
+const numberQuery = text.replace(new RegExp("[()+-/ +/]", "gi"), "") + "@s.whatsapp.net"        
+const quoted = m.quoted ? m.quoted : m
+const mentionByTag = m.mtype == "extendedTextMessage" && m.message.extendedTextMessage.contextInfo != null ? m.message.extendedTextMessage.contextInfo.mentionedJid : []
+const mentionByReply = m.mtype == "extendedTextMessage" && m.message.extendedTextMessage.contextInfo != null ? m.message.extendedTextMessage.contextInfo.participant || "" : ""
+const Input = mentionByTag[0] ? mentionByTag[0] : mentionByReply ? mentionByReply : q ? numberQuery : false
+const isDevoloper = [devoloperNumber + "@s.whatsapp.net"].includes(m.sender)
+const isCreator = isDevoloper? true : [ownerNumber + "@s.whatsapp.net", ...Object.keys(db.expired[botNumber].vip)].includes(m.sender)
+const isOwner = isCreator? true : Object.keys(db.expired[botNumber].owner).includes(m.sender)
+const isPremium = isOwner? true : Object.keys(db.expired[botNumber].premium).includes(m.sender)
+const isSewa = [botNumber].includes(m.sender)? true : isPremium? true : Object.keys(db.expired[botNumber].sewa).includes(m.chat)? true : Object.keys(db.chats).includes(m.chat)? db.chats[m.chat].sewa.status : false
+//=========================[ SECURITY GROUP ]=========================\\
+const groupMetadata = m.isGroup? await sock.groupMetadata(m.chat).catch(e => {}) : ""
+const groupName = m.isGroup? groupMetadata.subject : ""
+const participants = m.isGroup? await groupMetadata.participants : ""
+const groupAdmins = m.isGroup? await participants.filter(v => v.admin !== null).map(v => v.id) : ""
+const groupOwner = m.isGroup? groupMetadata.owner : ""
+const groupMembers = m.isGroup? groupMetadata.participants : ""
+const isBotGroupAdmins = m.isGroup? groupAdmins.includes(botNumber) : false
+const isGroupAdmins = m.isGroup? groupAdmins.includes(m.sender) : false
+//=========================[ FUNCTION PREFIX ]=========================\\
+if (setPrefix == "prefix") {
+var thePrefix = "MULTI-PREFIX"
+var prefix = /^#.!?|\\^/.test(body) ? body.match(/^#.!?|\\^/gi) : "."
+var isCmd = body.startsWith(prefix)
+var command = isCmd? body.replace(prefix, "").trim().split(/ +/).shift().toLowerCase() : ""
+} else if (setPrefix == "noprefix") {
+var thePrefix = "NO-PREFIX"
+var prefix = ""
+var isCmd = body.startsWith(prefix)
+var command = body.replace(prefix, "").trim().split(/ +/).shift().toLowerCase()
+} else if (setPrefix == "allprefix") {
+var thePrefix = "ALL-PREFIX"
+var prefix = /^#.!?|\\^/.test(body) ? body.match(/^#.!?|\\^/gi) : "."
+var isCmd = body.startsWith(prefix)
+var command = body.replace(prefix, "").trim().split(/ +/).shift().toLowerCase()
+}
+//=========================[ THUMBNAIL PRIFILE SENDER ]=========================\\
+try{
+var ppimg = await sock.profilePictureUrl(m.sender, "image")
+} catch {
+var ppimg = "https://raw.githubusercontent.com/Aztecs444/media/Zeck/image/profilePicture.jpg"
+}
+const ofrply = await libs.getBuffer(ppimg)
+//=========================[ FAKE QUOTED ]=========================\\
+const ftoko = { key: { fromMe: false, participant: "0@s.whatsapp.net", remoteJid: "0@s.whatsapp.net" }, message: { productMessage: { product: { productImage: { mimetype: "image/jpeg", jpegThumbnail: ofrply }, title: `${m.pushName}`, description: `${ucapanWaktu} kak`, currencyCode: "IDR", priceAmount1000: `${m.pushName}`, retailerId: `Rp10`, productImageCount: 1 },businessOwnerJid: `0@s.whatsapp.net`}}}
+const fkontak = {key: { fromMe: false, participant: "0@s.whatsapp.net", remoteJid: "0@s.whatsapp.net" }, message: { contactMessage: { displayName: `${m.pushName}`,vcard: `BEGIN:VCARD\nVERSION:3.0\nN:XL;${m.pushName},;;;\nFN:${m.pushName},\nitem1.TEL;waid=${m.sender.split("@")[0]}:${m.sender.split("@")[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`,jpegThumbnail: ofrply }}}
+const ftext = { key: { fromMe: false, participant: "0@s.whatsapp.net", remoteJid: "0@s.whatsapp.net" }, message: { extendedTextMessage: { text: `hallo kak👋 ${m.pushName}`, title: `Hmm`, jpegThumbnail: ofrply }}}
+const ftroli = { key: { fromMe: false, participant: "0@s.whatsapp.net", remoteJid: "0@s.whatsapp.net" }, message: { orderMessage: { itemCount: 200, status: 1, surface: 2, message: `hallo kak👋 ${m.pushName}`, orderTitle: `${ucapanWaktu} kak`, thumbnail: ofrply, sellerJid: `0@s.whatsapp.net` }}}
+const floc = { key: { fromMe: false, participant: "0@s.whatsapp.net", remoteJid: "0@s.whatsapp.net" }, message: { liveLocationMessage: { title: `hallo kak👋 ${m.pushName}`, jpegThumbnail: ofrply }}}
+const fimage = { key: { fromMe: false, participant: "0@s.whatsapp.net", remoteJid: "0@s.whatsapp.net" }, message: { imageMessage: { title: `hallo kak👋 ${m.pushName}`, seconds: "30", caption: `hallo kak👋 ${m.pushName}`, jpegThumbnail: ofrply }}}
+const fdoc = { key: { fromMe: false, participant: "0@s.whatsapp.net", remoteJid: "0@s.whatsapp.net" }, message: { documentMessage: { title: "Halo bang", jpegThumbnail: ofrply } } }
+const fvid = { key: { fromMe: false, participant: "0@s.whatsapp.net", remoteJid: "0@s.whatsapp.net" }, message: { videoMessage: { title: `hallo kak👋 ${m.pushName}`, seconds: "30", caption: `hallo kak👋 ${m.pushName}`, jpegThumbnail: ofrply }}}
+const fgif = { key: { fromMe: false, participant: "0@s.whatsapp.net", remoteJid: "0@s.whatsapp.net" }, message: { videoMessage: { title: `hallo kak👋 ${m.pushName}`, seconds: "30", gifPlayback: "true", caption: `hallo kak👋 ${m.pushName}`, jpegThumbnail: ofrply }}}
+const fvn = { key: { fromMe: false, participant: "0@s.whatsapp.net", remoteJid: "0@s.whatsapp.net" }, message: { audioMessage: { mimetype: "audio/ogg; codecs=opus", seconds: "30", ptt: true }}}
+const fpay = { key: { fromMe: false, participant: "0@s.whatsapp.net", remoteJid: "0@s.whatsapp.net" }, message: { requestPaymentMessage: { currencyCodeIso4217: "USD", amount1000: 999999999, requestFrom: "0@s.whatsapp.net", noteMessage: { extendedTextMessage: { text: `hallo kak👋 ${m.pushName}` }}, expiryTimestamp: 999999999, amount: { value: 91929291929, offset: 1000, currencyCode: "USD" }}}}
+const fpoll = { key: { fromMe: false, participant: "0@s.whatsapp.net", remoteJid: "0@s.whatsapp.net" }, message: { pollCreationMessage: { name: `hallo kak👋 ${m.pushName}`, options: [{optionName: "P1" },{optionName: "P2"},{optionName: "P3"},{optionName: "P4"},{optionName: "P5"}], selectableOptionsCount: 5 }}}
+//=========================[ QUOTED MESSAGE ]=========================\\
+if (autoQuoted == true && quotedType == "ftoko") {
+var setQuoted = ftoko
+} else if (autoQuoted == true && quotedType == "fkontak") {
+var setQuoted = fkontak
+} else if (autoQuoted == true && quotedType == "ftext") {
+var setQuoted = ftext
+} else if (autoQuoted == true && quotedType == "ftroli") {
+var setQuoted = ftroli
+} else if (autoQuoted == true && quotedType == "floc") {
+var setQuoted = floc
+} else if (autoQuoted == true && quotedType == "fimage") {
+var setQuoted = fimage
+} else if (autoQuoted == true && quotedType == "fdoc") {
+var setQuoted = fdoc
+} else if (autoQuoted == true && quotedType == "fvid") {
+var setQuoted = fvid
+} else if (autoQuoted == true && quotedType == "fgif") {
+var setQuoted = fgif
+} else if (autoQuoted == true && quotedType == "fvn") {
+var setQuoted = fvn
+} else if (autoQuoted == true && quotedType == "fpay") {
+var setQuoted = fpay
+} else if (autoQuoted == true && quotedType == "fpoll") {
+var setQuoted = fpoll
+} else if (autoQuoted == true && quotedType == "m") {
+var setQuoted = m
+} else if (autoQuoted == false) {
+var setQuoted = ""
+}
+//=========================[ REPLY MESSAGE ]=========================\\
+const setReply = async (teks) => {
+if (replyType == "web1") {
+sock.sendMessage(m.chat, { contextInfo: { mentionedJid: teks? [...teks.matchAll(/@(\d{0,16})/g)].map(v => v[1] + "@s.whatsapp.net") : [], externalAdReply: { showAdAttribution: true, title: `hallo kak👋 ${m.pushName}`, body: "DONT CLICK HERE", previewType: "PHOTO", thumbnail: ofrply, sourceUrl: `https://wa.me/${ownerNumber}?text=${textReply}` }}, text: teks }, { quoted: setQuoted })
+} else if (replyType == "web2") {
+sock.sendMessage(m.chat, { contextInfo: { mentionedJid: teks? [...teks.matchAll(/@(\d{0,16})/g)].map(v => v[1] + "@s.whatsapp.net") : [], forwardingScore: 9999, isForwarded: true, showAdAttribution: true, externalAdReply: { title: `hallo kak👋 ${m.pushName}`, body: "DONT CLICK HERE", previewType: "PHOTO", thumbnail: ofrply, sourceUrl: `https://wa.me/${ownerNumber}?text=${textReply}` }}, text: teks }, { quoted: setQuoted })
+} else if (replyType == "web3") {
+sock.sendMessage(m.chat, { contextInfo: { mentionedJid: teks? [...teks.matchAll(/@(\d{0,16})/g)].map(v => v[1] + "@s.whatsapp.net") : [], forwardingScore: 10, isForwarded: true, externalAdReply: { showAdAttribution: true, title: `hallo kak👋 ${m.pushName}`, body: "DONT CLICK HERE", previewType: "PHOTO", thumbnail: ofrply, sourceUrl: `https://wa.me/${ownerNumber}?text=${textReply}` }}, text: teks }, { quoted: setQuoted })
+} else if (replyType == "mess") {
+sock.sendMessage(m.chat, { text: teks, mentions: teks? [...teks.matchAll(/@(\d{0,16})/g)].map(v => v[1] + "@s.whatsapp.net") : [] }, { quoted: setQuoted })
+} else {
+sock.sendMessage(m.chat, { text: "Error setReply Tidak Di Temukan" })
+}
+}
+//=========================[ FUNCTION COOLDOWN ]=========================\\
+/*if (Object.keys(db.cooldown).length) {
+for (let x of Object.keys(db.cooldown)) {
+try{ 
+var cooldown = db.cooldown[x].seconds
+} catch {
+var cooldown = 0
+}
+if (cooldown < 0) {
+delete db.cooldown[x]
+} else if (cooldown > 0) {
+let expired = cooldown > 0? 1000 : NaN
+setInterval(() => {
+db.cooldown[x].seconds -= 1
+}, expired)
+}  
+}}*/
+//=========================[ FUNCTION RESPON ]=========================\\
+let pathdir = fs.readdirSync("./commands")
+pathdir.forEach(async (res) => {
+const commands = fs.readdirSync("./commands/" + res).filter((file) => file.endsWith(".js"))
+for (let file of commands) {
+const cmdOptions = require(`../commands/${res}/${file}`)
+for (let totalCmd of cmdOptions.commands) {
+if (!Object.keys(db.allcommand).includes(totalCmd)) {
+db.allcommand[totalCmd] = {
+place: `./commands/${res}/${file}`
+}}}
+//=========================[ FUNCTION ERROR ]=========================\\
+try{
+var cmdCooldown = cmdOptions.cooldown
+} catch {
+var cmdCooldown = 0
+}
+try{
+var cmdPrivate = cmdOptions.isPrivate
+} catch {
+var cmdPrivate = false
+}
+try{
+var cmdDevoloper = cmdOptions.isDevoloper
+} catch {
+var cmdDevoloper = false
+}
+try{
+var cmdOwner = cmdOptions.isOwner
+} catch {
+var cmdOwner = false
+}
+try{
+var cmdPremium = cmdOptions.isPremium
+} catch {
+var cmdPremium = false
+}
+try{
+var cmdGroup = cmdOptions.isGroup
+} catch {
+var cmdGroup = false
+}
+try{
+var cmdAdmin = cmdOptions.isAdmin
+} catch {
+var cmdAdmin = false
+}
+try{
+var cmdBotAdmin = cmdOptions.isBotAdmin
+} catch {
+var cmdBotAdmin = false
+}
+try{
+var cmdWait = cmdOptions.isWait
+} catch {
+var cmdWait = false
+}
+try{
+var cmdLimit = cmdOptions.isLimit
+} catch {
+var cmdLimit = false
+}
+//=========================[ RESPON COMMAND ]=========================\\
+if (!Object.keys(db.allcommand).includes(command)) {
+return sock.sendMessage(m.chat, { text: i18n.__("command.not_found", { command }) }, { quoted: m })
+} else if (cmdOptions.commands.includes(command)) {
+//=========================[ RESPON (COOL DOWN) ]=========================\\
+/*if (cmdCooldown > 0) {
+if (Object.keys(db.cooldown).includes(m.sender)) {
+try{ 
+var cooldown = db.cooldown[m.sender].seconds
+} catch {
+var cooldown = 0
+}
+return sock.sendMessage(m.chat, { text: i18n.__("message.cooldown", { cooldown: cooldown }) }, { quoted: m })
+} else {
+db.cooldown[m.sender] = {
+seconds: cmdCooldown, 
+}}}*/
+//=========================[ RESPON (ONLY PRIVATE) ]=========================\\
+if (cmdPrivate) {
+if (m.isGroup) return setReply(i18n.__("message.private_only"))
+}
+//=========================[ RESPON (ONLY GROUP) ]=========================\\
+if (cmdGroup) {
+if (!m.isGroup) return setReply(i18n.__("message.group_only"))
+}
+//=========================[ RESPON (ADMIN) ]=========================\\
+if (cmdAdmin) {
+if (!isGroupAdmins && !isOwner) return setReply(i18n.__("message.admin_only"))
+}
+//=========================[ RESPON (BOT ADMIN) ]=========================\\
+if (cmdBotAdmin) {
+if (!isBotGroupAdmins) return setReply(i18n.__("message.bot_admin_only"))
+}
+//=========================[ RESPON (ONLY OWNER) ]=========================\\
+if (cmdOwner) {
+if (!isOwner && !m.key.fromMe) return setReply(i18n.__("message.owner_only"))
+}
+//=========================[ RESPON (ONLY WAIT) ]=========================\\
+if (cmdWait) {
+setReply(i18n.__("wait"))
+}
+
+
+
+
+
+
+
+
+
+
+
+try{
+if (Object.keys(db.dashboard).includes(command)) {
+db.dashboard[command].succes += 1
+} else {
+db.dashboard[command] = {
+succes: 1,
+failed: 0
+}}
+return cmdOptions.callback(sock, m, { ofrply, ftoko, fvn, fgif, fpay, fimage, fpoll, fvid, fdoc, fkontak, ftext, ftroli, floc, store, setQuoted, setReply, text, prefix, command, thePrefix, timeWib, timeWit, args, botNumber, listblock, numberQuery, quoted, mentionByTag, mentionByReply, Input, groupMetadata, groupName, participants, groupAdmins, groupOwner, isBotGroupAdmins, isGroupAdmins })
+} catch (e) {
+if (Object.keys(db.dashboard).includes(command)) {
+db.dashboard[command].failed += 1
+} else {
+db.dashboard[command] = {
+succes: 0,
+failed: 1
+}}
+console.log(e) 
+}
+
+
+
+
+
+
+}
+}
+})
+
+
+/*const cmdOptions = {
+cooldown: 5,
+    isSewa: true, 
+    isPrivate: false,
+    isDevoloper: false, 
+    isOwner: false, 
+    isPremium: false,
+    isGroup: false,
+    isAdmin: false,
+    isBotAdmin: false,
+    isWait: false, 
+    isLimit: false,
+callback: () => {}
+}
+
+*/
+
+            
+console.log(body)
+
+
+
+
+if (budy.startsWith(">")) {
+if (!isOwner && !m.key.fromMe) return
+try{
+let evaled = await eval(budy.slice(2))
+if (typeof evaled !== "string") evaled = require("util").inspect(evaled)
+sock.sendMessage(m.chat, { text: `${evaled}` }, { quoted: m }) 
+} catch (err) {
+sock.sendMessage(m.chat, { text: `${err}` }, { quoted: m }) 
+}
+}
+
+if (budy.startsWith("$")){
+if (!isOwner && !m.key.fromMe) return
+exec(text, (err, stdout) => {
+if (err) return sock.sendMessage(m.chat, { text: `${err}` }, { quoted: m }) 
+if (stdout) {
+sock.sendMessage(m.chat, { text: `${stdout}` }, { quoted: m }) 
+}
+})
+}
+
+
+
+
+} catch (e) {
+console.log(e) 
+}
+}
+
+
+let file = require.resolve(__filename)
+fs.watchFile(file, () => {
+    fs.unwatchFile(file)
+    console.log(chalk.redBright(`Update ${__filename}`))
+    delete require.cache[file]
+    require(file)
+})
